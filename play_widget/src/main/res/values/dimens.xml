@@ -1,0 +1,36 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="pw_activity_horizontal_margin">16dp</dimen>
+    <dimen name="pw_activity_vertical_margin">16dp</dimen>
+
+    <dimen name="pw_margin_normal">10dp</dimen>
+    <dimen name="pw_margin_large">20dp</dimen>
+
+    <dimen name="pw_big_diffuser_size">320dp</dimen>
+    <dimen name="pw_medium_diffuser_size">210dp</dimen>
+    <dimen name="pw_small_diffuser_size">54dp</dimen>
+
+    <dimen name="pw_big_diffuser_shadow_width">30dp</dimen>
+    <dimen name="pw_medium_diffuser_shadow_width">25dp</dimen>
+    <dimen name="pw_small_diffuser_shadow_width">18dp</dimen>
+
+    <dimen name="pw_small_fab_default_elevation">6dp</dimen>
+    <dimen name="pw_small_fab_big_elevation">20dp</dimen>
+
+    <dimen name="pw_fab_margin_top">15dp</dimen>
+    <dimen name="pw_play_button_margin_bottom">0dp</dimen>
+
+    <dimen name="pw_default_fab_size">56dp</dimen>
+
+    <dimen name="pw_default_diffusers_padding">10dp</dimen>
+    <dimen name="pw_default_progress_line_padding">10dp</dimen>
+
+    <dimen name="pw_progress_complete_line_stroke_width">5dp</dimen>
+    <dimen name="pw_progress_ball_radius">4dp</dimen>
+    <dimen name="pw_progress_line_stroke_width">3dp</dimen>
+
+    <dimen name="pw_image_item_margin">10dp</dimen>
+    <dimen name="pw_image_item_size">48dp</dimen>
+    <dimen name="pw_image_item_double_size">96dp</dimen>
+
+</resources>

@@ -1,0 +1,4 @@
+<resources>
+    <public type="string" name="pw_app_name">PlayWidget</public>
+    <string name="pw_action_settings">Settings</string>
+</resources>

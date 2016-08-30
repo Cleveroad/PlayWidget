@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">sample</string>
+    <string name="title_permissions">Permissions</string>
+    <string name="message_permissions"><![CDATA[To allow music widget view to process audio stream app needs an access to your <b>Microphone</b>.]]></string>
+    <string name="btn_next">Next</string>
+    <string name="btn_cancel">Cancel</string>
+</resources>

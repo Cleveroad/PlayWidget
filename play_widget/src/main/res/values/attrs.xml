@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
-    <declare-styleable name="PlayWidget">
+    <declare-styleable name="PlayWidget" tools:ignore="ResourceName">
         <attr name="pw_diffusers_padding" format="dimension"/>
         <attr name="pw_progress_line_padding" format="dimension"/>
 

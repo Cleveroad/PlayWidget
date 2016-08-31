@@ -2,6 +2,7 @@ package com.cleveroad.play_widget;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
@@ -14,7 +15,11 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 
+/**
+ * Drawable that draw shadow for diffusers. provide methods for changing shadow size
+ */
 class ShadowDrawable extends Drawable {
     private static final int SHADOW_ANIMATION_DURATION = 350;
 
@@ -34,19 +39,19 @@ class ShadowDrawable extends Drawable {
     private final int mShadowMiddleColor;
     private final int mShadowEndColor;
 
-    public ShadowDrawable(Resources resources) {
-        this(resources, false);
+    public ShadowDrawable(Context context) {
+        this(context, false);
     }
 
-    public ShadowDrawable(Resources resources, boolean hard) {
+    public ShadowDrawable(Context context, boolean hard) {
         if (hard) {
-            mShadowStartColor = Utils.getColor(resources, R.color.pw_shadow_start_color_hard);
-            mShadowMiddleColor = Utils.getColor(resources, R.color.pw_shadow_mid_color_hard);
-            mShadowEndColor = Utils.getColor(resources, R.color.pw_shadow_end_color_hard);
+            mShadowStartColor = ContextCompat.getColor(context, R.color.pw_shadow_start_color_hard);
+            mShadowMiddleColor = ContextCompat.getColor(context, R.color.pw_shadow_mid_color_hard);
+            mShadowEndColor = ContextCompat.getColor(context, R.color.pw_shadow_end_color_hard);
         } else {
-            mShadowStartColor = Utils.getColor(resources, R.color.pw_shadow_start_color);
-            mShadowMiddleColor = Utils.getColor(resources, R.color.pw_shadow_mid_color);
-            mShadowEndColor = Utils.getColor(resources, R.color.pw_shadow_end_color);
+            mShadowStartColor = ContextCompat.getColor(context, R.color.pw_shadow_start_color);
+            mShadowMiddleColor = ContextCompat.getColor(context, R.color.pw_shadow_mid_color);
+            mShadowEndColor = ContextCompat.getColor(context, R.color.pw_shadow_end_color);
         }
 
         mCornerShadowPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
@@ -79,6 +84,10 @@ class ShadowDrawable extends Drawable {
 
     }
 
+    /**
+     * set shadow size multiplier allow change shadow size in percents.
+     * @param multiplier size in percents;
+     */
     public void setShadowSizeMultiplier(float multiplier) {
         mShadowSizeMultiplier = multiplier;
         setShadowSize(mFinalShadowSize, true);

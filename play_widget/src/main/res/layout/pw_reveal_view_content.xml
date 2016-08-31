@@ -15,7 +15,7 @@
         android:paddingBottom="@dimen/pw_default_fab_size"
     >
 
-        <com.cleveroad.play_widget.RoundRectImageView
+        <com.cleveroad.play_widget.internal.RoundRectImageView
             android:id="@+id/pw_ivBackground"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -26,13 +26,13 @@
             tools:src="@drawable/pw_image"
         />
 
-        <com.cleveroad.play_widget.DiffuserView
+        <com.cleveroad.play_widget.internal.DiffuserView
             android:id="@+id/pw_ivBigDiffuser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"/>
 
-        <com.cleveroad.play_widget.DiffuserView
+        <com.cleveroad.play_widget.internal.DiffuserView
             android:id="@+id/pw_ivMediumDiffuser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
             android:layout_height="@dimen/pw_small_diffuser_size"
             android:layout_centerInParent="true"/>
 
-        <com.cleveroad.play_widget.ProgressLineView
+        <com.cleveroad.play_widget.internal.ProgressLineView
             android:id="@+id/pw_vProgressLine"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

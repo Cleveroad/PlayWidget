@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startVisualiser() {
-        mShadowChanger = new VisualizerShadowChanger();
+        mShadowChanger = VisualizerShadowChanger.newInstance(0);
         mPlayLayout.setShadowProvider(mShadowChanger);
     }
 

@@ -22,6 +22,7 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,6 +33,10 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
+import com.cleveroad.play_widget.internal.DiffuserView;
+import com.cleveroad.play_widget.internal.ProgressLineView;
+import com.cleveroad.play_widget.internal.RoundRectImageView;
 
 /**
  * PlayLayout View implementation
@@ -159,12 +164,12 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
             setImageDrawable(d);
         }
 
-        int bigDiffuserColor = typedArrayValues.getColor(R.styleable.PlayWidget_pw_big_diffuser_color, Utils.getColor(getResources(), R.color.pw_circle_color));
-        int mediumDiffuserColor = typedArrayValues.getColor(R.styleable.PlayWidget_pw_medium_diffuser_color, Utils.getColor(getResources(), R.color.pw_circle_color_translucent));
+        int bigDiffuserColor = typedArrayValues.getColor(R.styleable.PlayWidget_pw_big_diffuser_color, ContextCompat.getColor(getContext(), R.color.pw_circle_color));
+        int mediumDiffuserColor = typedArrayValues.getColor(R.styleable.PlayWidget_pw_medium_diffuser_color, ContextCompat.getColor(getContext(), R.color.pw_circle_color_translucent));
 
-        setProgressLineColor(typedArrayValues.getColor(R.styleable.PlayWidget_pw_progress_line_color, Utils.getColor(getResources(), R.color.pw_progress_line_color)));
-        setProgressCompleteColor(typedArrayValues.getColor(R.styleable.PlayWidget_pw_progress_complete_line_color, Utils.getColor(getResources(), R.color.pw_progress_complete_color)));
-        setProgressBallColor(typedArrayValues.getColor(R.styleable.PlayWidget_pw_progress_ball_color, Utils.getColor(getResources(), R.color.pw_progress_ball_color)));
+        setProgressLineColor(typedArrayValues.getColor(R.styleable.PlayWidget_pw_progress_line_color, ContextCompat.getColor(getContext(), R.color.pw_progress_line_color)));
+        setProgressCompleteColor(typedArrayValues.getColor(R.styleable.PlayWidget_pw_progress_complete_line_color, ContextCompat.getColor(getContext(), R.color.pw_progress_complete_color)));
+        setProgressBallColor(typedArrayValues.getColor(R.styleable.PlayWidget_pw_progress_ball_color, ContextCompat.getColor(getContext(), R.color.pw_progress_ball_color)));
 
         ColorStateList lFabBackgroundTint = typedArrayValues.getColorStateList(R.styleable.PlayWidget_pw_play_button_background_tint);
         if (lFabBackgroundTint != null)
@@ -176,20 +181,20 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
 
         //big diffuser
         mIvBackground.setColor(bigDiffuserColor);
-        mBigShadowDrawable = new ShadowDrawable(getResources(), true);
+        mBigShadowDrawable = new ShadowDrawable(getContext(), true);
         mBigShadowDrawable.hideShadow(false);
         setupDiffuserView(mBigDiffuserImageView, mBigShadowDrawable);
 
         //medium diffuser
         mMediumDiffuserImageView.setColor(mediumDiffuserColor);
         mMediumDiffuserImageView.setMustDrawRevealAnimation(true);
-        mMediumShadowDrawable = new ShadowDrawable(getResources());
+        mMediumShadowDrawable = new ShadowDrawable(getContext());
         setupDiffuserView(mMediumDiffuserImageView, mMediumShadowDrawable);
         mMediumDiffuserImageView.setScaleX(0.0f);
         mMediumDiffuserImageView.setScaleY(0.0f);
 
         //small diffuser
-        mSmallShadowDrawable = new ShadowDrawable(getResources());
+        mSmallShadowDrawable = new ShadowDrawable(getContext());
         mSmallShadowDrawable.setup(mSmallDiffuserFullSize / 2.0f, mSmallDiffuserShadowWidth);
         setupDiffuserView(mSmallDiffuserImageView, mSmallShadowDrawable);
         mSmallShadowDrawable.hideShadow(false);
@@ -711,7 +716,7 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
      * @param colorRes Color resource color for big diffuser
      */
     public void setBigDiffuserColorResource(@ColorRes int colorRes) {
-        setBigDiffuserColor(Utils.getColor(getResources(), colorRes));
+        setBigDiffuserColor(ContextCompat.getColor(getContext(), colorRes));
     }
 
     /**
@@ -730,7 +735,7 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
      * @param colorRes Color resource color for medium diffuser
      */
     public void setMediumDiffuserColorResource(@ColorRes int colorRes) {
-        setMediumDiffuserColor(Utils.getColor(getResources(), colorRes));
+        setMediumDiffuserColor(ContextCompat.getColor(getContext(), colorRes));
     }
 
     /**
@@ -853,7 +858,7 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
      * @param colorRes Color res Color for progress line
      */
     public void setProgressLineColorResource(@ColorRes int colorRes) {
-        setProgressLineColor(Utils.getColor(getResources(), colorRes));
+        setProgressLineColor(ContextCompat.getColor(getContext(), colorRes));
     }
 
     /**
@@ -872,7 +877,7 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
      * @param colorRes Color res Color for progress complete line
      */
     public void setProgressCompleteColorResource(@ColorRes int colorRes) {
-        setProgressCompleteColor(Utils.getColor(getResources(), colorRes));
+        setProgressCompleteColor(ContextCompat.getColor(getContext(), colorRes));
     }
 
     /**
@@ -891,7 +896,7 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
      * @param colorRes Color resource Color for progress ball indicator
      */
     public void setProgressBallColorResource(@ColorRes int colorRes) {
-        setProgressBallColor(Utils.getColor(getResources(), colorRes));
+        setProgressBallColor(ContextCompat.getColor(getContext(), colorRes));
     }
 
     private boolean isOpenInner() {
@@ -1180,8 +1185,9 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
                 };
     }
 
-    public static abstract class ShadowPercentageProvider {
 
+
+    public static abstract class ShadowPercentageProvider {
         private boolean allowChangeShadow = false;
 
         private OnShadowChangeListener shadowChangedListener;

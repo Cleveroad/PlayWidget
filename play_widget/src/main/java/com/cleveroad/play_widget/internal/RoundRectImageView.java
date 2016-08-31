@@ -1,4 +1,4 @@
-package com.cleveroad.play_widget;
+package com.cleveroad.play_widget.internal;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -15,7 +15,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
 
-class RoundRectImageView extends ImageView {
+public class RoundRectImageView extends ImageView {
 
     private Paint mPaint;
     private Paint mMaskPaint;

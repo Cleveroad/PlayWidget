@@ -1,4 +1,4 @@
-package com.cleveroad.play_widget;
+package com.cleveroad.play_widget.internal;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -10,10 +10,13 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 import android.os.Build;
 import android.support.annotation.ColorInt;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
-class ProgressLineView extends ImageView {
+import com.cleveroad.play_widget.R;
+
+public class ProgressLineView extends ImageView {
 
     private static final int ADDITIONAL_PROGRESS_DEGREE = 20;
     private static final float BEGIN_PROGRESS_DEGREE = 180 - ADDITIONAL_PROGRESS_DEGREE;
@@ -67,20 +70,20 @@ class ProgressLineView extends ImageView {
         mLinePaint.setStyle(Paint.Style.STROKE);
         mLinePaint.setStrokeCap(Paint.Cap.ROUND);
         mLinePaint.setStrokeWidth(mProgressLineStrokeWidth);
-        setProgressLineColor(Utils.getColor(getContext().getResources(), R.color.pw_progress_line_color));
+        setProgressLineColor(ContextCompat.getColor(getContext(), R.color.pw_progress_line_color));
 
         mProgressPaint = new Paint();
         mProgressPaint.setAntiAlias(true);
         mProgressPaint.setStyle(Paint.Style.STROKE);
         mProgressPaint.setStrokeCap(Paint.Cap.ROUND);
         mProgressPaint.setStrokeWidth(mProgressCompleteLineStrokeWidth);
-        setProgressCompleteColor(Utils.getColor(getContext().getResources(), R.color.pw_progress_complete_color));
+        setProgressCompleteColor(ContextCompat.getColor(getContext(), R.color.pw_progress_complete_color));
 
         mProgressBallPaint = new Paint();
         mProgressBallPaint.setStyle(Paint.Style.FILL);
         mProgressBallPaint.setAntiAlias(true);
         mProgressBallPaint.setStrokeWidth(1);
-        setProgressBallColor(Utils.getColor(getContext().getResources(), R.color.pw_progress_ball_color));
+        setProgressBallColor(ContextCompat.getColor(getContext(), R.color.pw_progress_ball_color));
 
     }
 

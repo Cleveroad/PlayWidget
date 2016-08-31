@@ -129,13 +129,16 @@ protected void changeShadow(
 
 To set shadow provider use:
 ```JAVA
-void setShadowProvider(shadowProvider);
+mPlayLayout.setShadowProvider( VisualizerShadowChanger.newInstance(yourAudioSessionId) );
 ```
+where `yourAudioSessionId` is audioSession from MediaPlayer or AudioTrack or 0.
 For using **VisualizerShadowChanger** need to provide permissions:
 ```XML
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
 ```
+
+
 
 ## Support
 

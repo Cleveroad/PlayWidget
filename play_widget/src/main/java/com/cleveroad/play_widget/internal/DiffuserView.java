@@ -1,4 +1,4 @@
-package com.cleveroad.play_widget;
+package com.cleveroad.play_widget.internal;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -11,7 +11,7 @@ import android.support.annotation.ColorInt;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
-class DiffuserView extends ImageView {
+public class DiffuserView extends ImageView {
 
     private float mRadiusPercentage = 0.0f;
     private boolean mDismissAnimation = false;

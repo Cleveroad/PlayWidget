@@ -27,10 +27,14 @@ public class VisualizerShadowChanger extends PlayLayout.ShadowPercentageProvider
     private float[] mDbsPercentagesConcrete = new float[SOUND_INDEX_COEFFICIENTS.length];
     private Visualizer mVisualizer;
 
-    public VisualizerShadowChanger() {
-        mVisualizer = new Visualizer(0);
+    private VisualizerShadowChanger(int audioSessionId) {
+        mVisualizer = new Visualizer(audioSessionId);
         mVisualizer.setCaptureSize(Visualizer.getCaptureSizeRange()[1]);
         mVisualizer.setDataCaptureListener(this, Visualizer.getMaxCaptureRate(), false, true);
+    }
+
+    public static VisualizerShadowChanger newInstance(int audioSessionId) {
+        return new VisualizerShadowChanger(audioSessionId);
     }
 
     /**

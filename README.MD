@@ -4,7 +4,7 @@
 Use the PlayLayout in layout file
 ```XML
 <com.cleveroad.play_widget.PlayLayout
-   android:id="@+id/revealView"
+   android:id="@+id/playLayout"
    android:layout_width="wrap_content"
    android:layout_height="wrap_content"
 
@@ -118,7 +118,7 @@ void shadowChanged(
 ```
 
 You can use shadow provider **VisualizerShadowChanger**. **VisualizerShadowChanger** listen to audio from android system and translate it to diffusers shadow changing.
-To implement you own data shadow provider, just extend your class from **RevealView.ShadowPercentageProvider** class and use changeShadow method to set new shadow percentages.
+To implement you own data shadow provider, just extend your class from **PlayLayout.ShadowPercentageProvider** class and use changeShadow method to set new shadow percentages.
 ```JAVA
 protected void changeShadow(
     float bigDiffuserShadowPercentage,

@@ -96,16 +96,35 @@ void setProgress(float progress)
 For providing buttons listener use:
 ```JAVA
 void setOnButtonsClickListener(new OnButtonsClickListener() {
-   @Override
-   public void onShuffleClicked() { }
-   @Override
-   public void onSkipPreviousClicked() { }
-   @Override
-   public void onSkipNextClicked() { }
-   @Override
-   public void onRepeatClicked() { }
-   @Override
-   public void onPlayButtonClicked() { }
+    @Override
+    public void onShuffleClicked() { }
+    @Override
+    public void onSkipPreviousClicked() { }
+    @Override
+    public void onSkipNextClicked() { }
+    @Override
+    public void onRepeatClicked() { }
+    @Override
+    public void onPlayButtonClicked() { }
+});
+void setOnButtonsLongClickListener(new OnButtonsLongClickListener() {
+    @Override
+    public void onShuffleLongClicked() {}
+    @Override
+    public void onSkipPreviousLongClicked() {}
+    @Override
+    public void onSkipNextLongClicked() {}
+    @Override
+    public void onRepeatLongClicked() {}
+    @Override
+    public void onPlayButtonLongClicked() {}
+});
+```
+For providing progress changed listener use:
+```JAVA
+void setOnProgressChangedListener(new OnProgressChangedListener() {
+    @Override
+    public void onProgressChanged(float progress) {}
 });
 ```
 For changing shadow params you can use method:

@@ -79,7 +79,6 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
     private int mButtonsSize;
 
     private int mDiffusersPadding;
-    private int mProgressViewPadding;
 
     private ImageView mIvShuffle;
     private ImageView mIvSkipPrevious;
@@ -145,7 +144,8 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
         mProgressLineView.setEnabled(typedArrayValues.getBoolean(R.styleable.PlayWidget_pw_progress_line_enabled, true));
 
         mDiffusersPadding = typedArrayValues.getDimensionPixelSize(R.styleable.PlayWidget_pw_diffusers_padding, context.getResources().getDimensionPixelSize(R.dimen.pw_default_diffusers_padding));
-        mProgressViewPadding = typedArrayValues.getDimensionPixelSize(R.styleable.PlayWidget_pw_progress_line_padding, context.getResources().getDimensionPixelSize(R.dimen.pw_default_progress_line_padding));
+
+        mProgressLineView.setPadding(typedArrayValues.getDimensionPixelSize(R.styleable.PlayWidget_pw_progress_line_padding, context.getResources().getDimensionPixelSize(R.dimen.pw_default_progress_line_padding)));
 
         int progressCompleteLineStrokeWidth = typedArrayValues.getDimensionPixelSize(R.styleable.PlayWidget_pw_progress_complete_line_stroke_width, context.getResources().getDimensionPixelSize(R.dimen.pw_progress_complete_line_stroke_width));
         int progressLineStrokeWidth = typedArrayValues.getDimensionPixelSize(R.styleable.PlayWidget_pw_progress_line_stroke_width, context.getResources().getDimensionPixelSize(R.dimen.pw_progress_line_stroke_width));
@@ -341,10 +341,10 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
         );
 
         mProgressLineView.layout(
-                mProgressViewPadding + additionalPadding,
-                mProgressViewPadding,
-                containerSize - mProgressViewPadding + additionalPadding,
-                containerSize - mProgressViewPadding
+                additionalPadding,
+                0,
+                containerSize + additionalPadding,
+                containerSize
         );
 
         float bigDiffuserHalfRadius = (mBigDiffuserImageView.getRight() - mBigDiffuserImageView.getLeft()) / 2.0f;
@@ -754,7 +754,17 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
      * @param padding Padding for progress line
      */
     public void setProgressLinePadding(int padding) {
-        mProgressViewPadding = padding;
+        mProgressLineView.setPadding(padding);
+        requestLayout();
+    }
+
+    /**
+     * Set padding for progress line
+     *
+     * @param padding Padding for progress line
+     */
+    public void setProgressLinePadding(float padding) {
+        mProgressLineView.setPadding(padding);
         requestLayout();
     }
 
@@ -899,6 +909,14 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
         setProgressBallColor(ContextCompat.getColor(getContext(), colorRes));
     }
 
+    /**
+     * Set progressChangedListener
+     * @param progressChangedListener  PlayLayout.OnProgressChangedListener listener for the event;
+     */
+    public void setOnProgressChangedListener(PlayLayout.OnProgressChangedListener progressChangedListener) {
+        mProgressLineView.setOnProgressChangedListener(progressChangedListener);
+    }
+
     private boolean isOpenInner() {
         return mRadiusPercentage > 0.5f;
     }
@@ -945,6 +963,7 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
 
     /**
      * Getter for ImageView shuffle button
+     *
      * @return ImageView shuffle button
      */
     public ImageView getIvShuffle() {
@@ -953,6 +972,7 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
 
     /**
      * Getter for ImageView skip previous button
+     *
      * @return ImageView skipPrevious button
      */
     public ImageView getIvSkipPrevious() {
@@ -961,6 +981,7 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
 
     /**
      * Getter for ImageView skip next button
+     *
      * @return ImageView skip next button
      */
     public ImageView getIvSkipNext() {
@@ -969,6 +990,7 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
 
     /**
      * Getter for ImageView repeat button
+     *
      * @return ImageView repeat button
      */
     public ImageView getIvRepeat() {
@@ -977,6 +999,7 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
 
     /**
      * Getter for ImageView playButton button
+     *
      * @return ImageView play button button
      */
     public FloatingActionButton getPlayButton() {
@@ -1017,7 +1040,7 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
         ss.smallDiffuserShadowWidth = mSmallDiffuserShadowWidth;
 
         ss.diffuserPadding = mDiffusersPadding;
-        ss.progressViewPadding = mProgressViewPadding;
+        ss.progressViewPadding = mProgressLineView.getPadding();
         ss.buttonSize = mButtonsSize;
 
         ss.progressBallRadius = mProgressLineView.getProgressBallRadius();
@@ -1027,7 +1050,7 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
         ss.progressBallColor = mProgressLineView.getProgressBallColor();
         ss.progressCompleteLineColor = mProgressLineView.getProgressCompleteLineColor();
         ss.progressLineColor = mProgressLineView.getProgressLineColor();
-        if (mShadowProvider!=null) {
+        if (mShadowProvider != null) {
             ss.isAllowShadowChanging = mShadowProvider.isAllowChangeShadow();
         }
         return ss;
@@ -1075,7 +1098,7 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
         mIvBackground.setRevealDrawingAlpha(1.0f);
         mIvBackground.setRadiusPercentage(mRadiusPercentage);
 
-        if (mShadowProvider!=null) {
+        if (mShadowProvider != null) {
             mShadowProvider.setAllowChangeShadow(ss.isAllowShadowChanging);
         }
 
@@ -1099,7 +1122,7 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
         private int smallDiffuserShadowWidth;
 
         private int diffuserPadding;
-        private int progressViewPadding;
+        private float progressViewPadding;
         private int buttonSize;
 
         private float progressBallRadius;
@@ -1160,7 +1183,7 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
             out.writeInt(this.smallDiffuserShadowWidth);
 
             out.writeInt(this.diffuserPadding);
-            out.writeInt(this.progressViewPadding);
+            out.writeFloat(this.progressViewPadding);
             out.writeInt(this.buttonSize);
 
             out.writeFloat(this.progressBallRadius);
@@ -1186,7 +1209,6 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
     }
 
 
-
     public static abstract class ShadowPercentageProvider {
         private boolean allowChangeShadow = false;
 
@@ -1210,6 +1232,13 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
         public void setAllowChangeShadow(boolean allowChangeShadow) {
             this.allowChangeShadow = allowChangeShadow;
         }
+    }
+
+    /**
+     * Interface for sending events about changing of progress by user interaction.
+     */
+    public interface OnProgressChangedListener {
+        void onProgressChanged(float progress);
     }
 
     /**
@@ -1306,6 +1335,7 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
 
         /**
          * Set layout params for PlayLayout
+         *
          * @param params LayoutParam for playLayout
          * @return
          */
@@ -1652,6 +1682,15 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
          */
         public Builder setProgressBallColorResource(@ColorRes int colorRes) {
             playLayout.setProgressBallColor(colorRes);
+            return this;
+        }
+
+        /**
+         * Set progressChanged Listener
+         * @param progressChangedListener  PlayLayout.OnProgressChangedListener listener for the event;
+         */
+        public Builder setProgressChangedListener(PlayLayout.OnProgressChangedListener progressChangedListener) {
+            playLayout.setOnProgressChangedListener(progressChangedListener);
             return this;
         }
 

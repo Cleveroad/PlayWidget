@@ -33,4 +33,6 @@
     <dimen name="pw_image_item_size">48dp</dimen>
     <dimen name="pw_image_item_double_size">96dp</dimen>
 
+    <dimen name="pw_progress_line_view_touch_radius">16dp</dimen>
+
 </resources>

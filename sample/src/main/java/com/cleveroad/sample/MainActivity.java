@@ -15,6 +15,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
+import android.util.Log;
 
 import com.cleveroad.play_widget.PlayLayout;
 import com.cleveroad.play_widget.VisualizerShadowChanger;
@@ -35,6 +36,28 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPlayButtonClicked() {
                 playButtonClicked();
+            }
+        });
+        mPlayLayout.setOnButtonsLongClickListener(new PlayLayout.OnButtonsLongClickListener() {
+            @Override
+            public void onShuffleLongClicked() {}
+
+            @Override
+            public void onSkipPreviousLongClicked() {}
+
+            @Override
+            public void onSkipNextLongClicked() {}
+
+            @Override
+            public void onRepeatLongClicked() {}
+
+            @Override
+            public void onPlayButtonLongClicked() {}
+        });
+        mPlayLayout.setOnProgressChangedListener(new PlayLayout.OnProgressChangedListener() {
+            @Override
+            public void onProgressChanged(float progress) {
+                Log.i("onProgressChanged", "Progress = " + progress);
             }
         });
 
@@ -189,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
                     super.onAnimationEnd(animation);
                 }
             });
-            valueAnimator.start();
+//            valueAnimator.start();
         }
 
     }

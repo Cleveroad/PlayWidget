@@ -9,6 +9,7 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 import android.os.Build;
 import android.support.annotation.ColorInt;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -89,7 +90,7 @@ public class ProgressLineView extends ImageView {
 
     public void setProgress(float progress) {
         if (!mHandledTouch) {
-            this.mProgress = Math.min(1.0f, Math.max(0.0f, progress));
+            mProgress = Utils.betweenZeroOne(progress);
         }
     }
 
@@ -271,7 +272,7 @@ public class ProgressLineView extends ImageView {
      *
      * @param progressChangedListener PlayLayout.OnProgressChangedListener listener for the event;
      */
-    public void setOnProgressChangedListener(PlayLayout.OnProgressChangedListener progressChangedListener) {
+    public void setOnProgressChangedListener(@Nullable PlayLayout.OnProgressChangedListener progressChangedListener) {
         mProgressChangedListener = progressChangedListener;
     }
 }

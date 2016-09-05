@@ -36,6 +36,7 @@ import android.widget.RelativeLayout;
 import com.cleveroad.play_widget.internal.DiffuserView;
 import com.cleveroad.play_widget.internal.ProgressLineView;
 import com.cleveroad.play_widget.internal.RoundRectImageView;
+import com.cleveroad.play_widget.internal.Utils;
 
 /**
  * PlayLayout View implementation
@@ -84,8 +85,8 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
     private ImageView mIvSkipNext;
     private ImageView mIvRepeat;
 
-    private OnButtonsClickListener mClickListener;
-    private OnButtonsLongClickListener mLongClickListener;
+    private @Nullable OnButtonsClickListener mClickListener;
+    private @Nullable OnButtonsLongClickListener mLongClickListener;
 
     public PlayLayout(Context context) {
         this(context, null);
@@ -418,12 +419,20 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
         }
     }
 
-    public void setOnButtonsClickListener(OnButtonsClickListener listener) {
-        this.mClickListener = listener;
+    /**
+     * Set OnButtonsClickListener for layout
+     * @param listener -> OnButtonsClickListener
+     */
+    public void setOnButtonsClickListener(@Nullable OnButtonsClickListener listener) {
+        mClickListener = listener;
     }
 
-    public void setOnButtonsLongClickListener(OnButtonsLongClickListener listener) {
-        this.mLongClickListener = listener;
+    /**
+     * Set OnButtonsLongClickListener for layout
+     * @param listener -> OnButtonsLongClickListener
+     */
+    public void setOnButtonsLongClickListener(@Nullable OnButtonsLongClickListener listener) {
+        mLongClickListener = listener;
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -929,7 +938,7 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
      *
      * @param progressChangedListener PlayLayout.OnProgressChangedListener listener for the event;
      */
-    public void setOnProgressChangedListener(PlayLayout.OnProgressChangedListener progressChangedListener) {
+    public void setOnProgressChangedListener(@Nullable PlayLayout.OnProgressChangedListener progressChangedListener) {
         mProgressLineView.setOnProgressChangedListener(progressChangedListener);
     }
 
@@ -959,6 +968,10 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
      * @param provider ShadowPercentageProvider
      */
     public void setShadowProvider(@NonNull ShadowPercentageProvider provider) {
+        //noinspection ConstantConditions
+        if (provider==null) {
+            throw new IllegalArgumentException("ShadowPercentageProvider cannot be null");
+        }
         mShadowProvider = provider;
         provider.setShadowChangerListener(this);
         if (isOpenInner()) {
@@ -975,9 +988,9 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
      */
     @Override
     public void shadowChanged(float bigDiffuserShadowPercentage, float mediumDiffuserShadowPercentage, float smallDiffuserShadowPercentage) {
-        mBigShadowDrawable.setShadowSizeMultiplier(Math.min(1.0f, Math.max(0.0f, bigDiffuserShadowPercentage)) * (1 - BIG_DIFFUSER_MIN_SHADOW_PERCENT) + BIG_DIFFUSER_MIN_SHADOW_PERCENT);
-        mMediumShadowDrawable.setShadowSizeMultiplier(Math.min(1.0f, Math.max(0.0f, mediumDiffuserShadowPercentage)) * (1 - MEDIUM_DIFFUSER_MIN_SHADOW_PERCENT) + MEDIUM_DIFFUSER_MIN_SHADOW_PERCENT);
-        mSmallShadowDrawable.setShadowSizeMultiplier(Math.min(1.0f, Math.max(0.0f, smallDiffuserShadowPercentage)) * (1 - SMALL_DIFFUSER_MIN_SHADOW_PERCENT) + SMALL_DIFFUSER_MIN_SHADOW_PERCENT);
+        mBigShadowDrawable.setShadowSizeMultiplier(Utils.betweenZeroOne(bigDiffuserShadowPercentage) * (1 - BIG_DIFFUSER_MIN_SHADOW_PERCENT) + BIG_DIFFUSER_MIN_SHADOW_PERCENT);
+        mMediumShadowDrawable.setShadowSizeMultiplier(Utils.betweenZeroOne(mediumDiffuserShadowPercentage) * (1 - MEDIUM_DIFFUSER_MIN_SHADOW_PERCENT) + MEDIUM_DIFFUSER_MIN_SHADOW_PERCENT);
+        mSmallShadowDrawable.setShadowSizeMultiplier(Utils.betweenZeroOne(smallDiffuserShadowPercentage) * (1 - SMALL_DIFFUSER_MIN_SHADOW_PERCENT) + SMALL_DIFFUSER_MIN_SHADOW_PERCENT);
     }
 
     /**
@@ -1710,7 +1723,7 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
          *
          * @param progressChangedListener PlayLayout.OnProgressChangedListener listener for the event;
          */
-        public Builder setProgressChangedListener(PlayLayout.OnProgressChangedListener progressChangedListener) {
+        public Builder setProgressChangedListener(@Nullable PlayLayout.OnProgressChangedListener progressChangedListener) {
             playLayout.setOnProgressChangedListener(progressChangedListener);
             return this;
         }
@@ -1718,7 +1731,7 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
         /**
          * Set buttons click listener
          */
-        public Builder setOnButtonsClickListener(OnButtonsClickListener listener) {
+        public Builder setOnButtonsClickListener(@Nullable OnButtonsClickListener listener) {
             playLayout.setOnButtonsClickListener(listener);
             return this;
         }
@@ -1726,7 +1739,7 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
         /**
          * Set buttons long click listener
          */
-        public Builder setOnButtonsLongClickListener(OnButtonsLongClickListener listener) {
+        public Builder setOnButtonsLongClickListener(@Nullable OnButtonsLongClickListener listener) {
             playLayout.setOnButtonsLongClickListener(listener);
             return this;
         }

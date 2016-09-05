@@ -16,6 +16,8 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 
+import com.cleveroad.play_widget.internal.Utils;
+
 /**
  * Drawable that draw shadow for diffusers. provide methods for changing shadow size
  */
@@ -212,7 +214,7 @@ class ShadowDrawable extends Drawable {
     }
 
     public void showShadow(boolean animated, float percentage) {
-        percentage = Math.min(1.0f, Math.max(0.0f, percentage));
+        percentage = Utils.betweenZeroOne(percentage);
         if (animated) {
             ObjectAnimator.ofInt(this, "alpha", 0, (int) (255 * percentage)).setDuration(SHADOW_ANIMATION_DURATION).start();
         } else {
@@ -225,7 +227,7 @@ class ShadowDrawable extends Drawable {
     }
 
     public void hideShadow(boolean animated, float percentage, Animator.AnimatorListener listener) {
-        percentage = Math.min(1.0f, Math.max(0.0f, percentage));
+        percentage = Utils.betweenZeroOne(percentage);
         if (animated) {
             Animator animator = ObjectAnimator.ofInt(this, "alpha", (int) (255 * percentage), 0).setDuration(SHADOW_ANIMATION_DURATION);
             if (listener != null) {

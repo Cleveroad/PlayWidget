@@ -3,4 +3,8 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="bg_songs_list">#557b9b</color>
+    <color name="music_item_text_color">#ffffff</color>
+    <color name="music_item_subtext_color">#99ffffff</color>
 </resources>

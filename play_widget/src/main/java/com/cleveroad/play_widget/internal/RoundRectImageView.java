@@ -12,6 +12,7 @@ import android.graphics.RectF;
 import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -20,7 +21,9 @@ public class RoundRectImageView extends ImageView {
     private Paint mPaint;
     private Paint mMaskPaint;
     private Paint mCirclePaint;
-    private @ColorInt int mColor;
+    private
+    @ColorInt
+    int mColor;
     private Bitmap mAnimationMaskBitmap;
     private Canvas mAnimationMaskCanvas;
     private float mRadiusPercentage = 0.0f;
@@ -28,6 +31,7 @@ public class RoundRectImageView extends ImageView {
     private boolean mRevealAnimation = false;
     private boolean mDismissAnimation = false;
     private RectF mRectF = new RectF();
+    private int mSize;
 
     public RoundRectImageView(Context context) {
         this(context, null);
@@ -61,7 +65,7 @@ public class RoundRectImageView extends ImageView {
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mPaint.setStyle(Paint.Style.FILL);
-        mPaint.setColor(Color.BLUE);
+        mPaint.setColor(Color.BLACK);
 
         mMaskPaint = new Paint();
         mMaskPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
@@ -73,7 +77,9 @@ public class RoundRectImageView extends ImageView {
         mColorAlpha = Color.alpha(color);
     }
 
-    public @ColorInt int getColor() {
+    public
+    @ColorInt
+    int getColor() {
         return mColor;
     }
 
@@ -119,12 +125,13 @@ public class RoundRectImageView extends ImageView {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         final int widthSize = MeasureSpec.getSize(widthMeasureSpec);
         final int heightSize = MeasureSpec.getSize(heightMeasureSpec);
-        int size = widthSize < heightSize ? widthSize : heightSize;
-        setMeasuredDimension(size, size);
-        if (mAnimationMaskBitmap == null) {
-            mAnimationMaskBitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_4444);
+        int newSize = Math.min(widthSize, heightSize);
+        setMeasuredDimension(newSize, newSize);
+        if (mAnimationMaskBitmap == null || mSize != newSize) {
+            mAnimationMaskBitmap = Bitmap.createBitmap(newSize, newSize, Bitmap.Config.ARGB_4444);
             mAnimationMaskCanvas = new Canvas(mAnimationMaskBitmap);
         }
+        mSize = newSize;
     }
 
     @Override

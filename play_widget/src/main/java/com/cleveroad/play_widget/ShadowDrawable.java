@@ -3,7 +3,6 @@ package com.cleveroad.play_widget;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
@@ -23,7 +22,7 @@ import android.support.v4.content.ContextCompat;
 class ShadowDrawable extends Drawable {
     private static final int SHADOW_ANIMATION_DURATION = 350;
 
-    private float mShadowSizeMultiplier = 1.0f;
+    private float mShadowSizeMultiplier = 0.5f;
     private final Paint mCornerShadowPaint;
     private final RectF mContentBounds;
     private float mCornerRadius;

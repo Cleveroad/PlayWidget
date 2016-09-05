@@ -24,7 +24,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -198,7 +197,6 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
         mSmallShadowDrawable.setup(mSmallDiffuserFullSize / 2.0f, mSmallDiffuserShadowWidth);
         setupDiffuserView(mSmallDiffuserImageView, mSmallShadowDrawable);
         mSmallShadowDrawable.hideShadow(false);
-        Log.e("Init", "Init");
     }
 
     private void initListeners() {
@@ -443,6 +441,16 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
         return mSmallDiffuserImageView.getTop() + mSmallDiffuserImageView.getHeight() / 2 - mPlayButton.getTop() - mPlayButton.getHeight() / 2 + getPaddingTop();
     }
 
+    public void fastOpen() {
+        mIvBackground.setRevealDrawingAlpha(1.0f);
+        mRadiusPercentage = 1.0f;
+        if (mProgressLineView.isEnabled()) {
+            mProgressLineView.setAlpha(1.0f);
+        }
+        mIvBackground.setRadiusPercentage(mRadiusPercentage);
+        revealView();
+    }
+
     public void startRevealAnimation() {
         if (mShadowProvider != null) {
             mShadowProvider.setAllowChangeShadow(true);
@@ -486,7 +494,7 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
                     mBigShadowDrawable.showShadow(true);
                     mSmallShadowDrawable.showShadow(true, SMALL_SHADOW_OPACITY);
                     ObjectAnimator.ofFloat(mProgressLineView, "alpha", 0.0f, 1.0f).setDuration(PROGRESS_LINE_ALPHA_ANIMATION_DURATION).start();
-                    mProgressLineView.setEnabled(true);
+//                    mProgressLineView.setEnabled(true);
                 }
             });
         }
@@ -513,13 +521,6 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
         mMediumDiffuserImageView.setDismissAnimation(true);
         mBigShadowDrawable.hideShadow(true);
         Animator progressViewDismissAnimator = ObjectAnimator.ofFloat(mProgressLineView, "alpha", 1.0f, 0.0f);
-        progressViewDismissAnimator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                mProgressLineView.setEnabled(false);
-                super.onAnimationEnd(animation);
-            }
-        });
         progressViewDismissAnimator.setDuration(PROGRESS_LINE_ALPHA_ANIMATION_DURATION).start();
         mSmallShadowDrawable.hideShadow(true, SMALL_SHADOW_OPACITY, new AnimatorListenerAdapter() {
             @Override
@@ -573,6 +574,20 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
             mProgressLineView.setProgress(progress);
             mProgressLineView.invalidate();
         }
+    }
+
+    /**
+     * Set progress for progress line view. This will call setProgress on main thread.
+     *
+     * @param progress the progress in percentage. (0.0 - 1.0f)
+     */
+    public void setPostProgress(final float progress) {
+        post(new Runnable() {
+            @Override
+            public void run() {
+                setProgress(progress);
+            }
+        });
     }
 
     /**
@@ -911,7 +926,8 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
 
     /**
      * Set progressChangedListener
-     * @param progressChangedListener  PlayLayout.OnProgressChangedListener listener for the event;
+     *
+     * @param progressChangedListener PlayLayout.OnProgressChangedListener listener for the event;
      */
     public void setOnProgressChangedListener(PlayLayout.OnProgressChangedListener progressChangedListener) {
         mProgressLineView.setOnProgressChangedListener(progressChangedListener);
@@ -945,6 +961,9 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
     public void setShadowProvider(@NonNull ShadowPercentageProvider provider) {
         mShadowProvider = provider;
         provider.setShadowChangerListener(this);
+        if (isOpenInner()) {
+            provider.setAllowChangeShadow(true);
+        }
     }
 
     /**
@@ -1238,6 +1257,7 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
      * Interface for sending events about changing of progress by user interaction.
      */
     public interface OnProgressChangedListener {
+        void onPreSetProgress();
         void onProgressChanged(float progress);
     }
 
@@ -1687,7 +1707,8 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
 
         /**
          * Set progressChanged Listener
-         * @param progressChangedListener  PlayLayout.OnProgressChangedListener listener for the event;
+         *
+         * @param progressChangedListener PlayLayout.OnProgressChangedListener listener for the event;
          */
         public Builder setProgressChangedListener(PlayLayout.OnProgressChangedListener progressChangedListener) {
             playLayout.setOnProgressChangedListener(progressChangedListener);
@@ -1721,6 +1742,7 @@ public class PlayLayout extends RelativeLayout implements OnShadowChangeListener
 
         /**
          * Create PlayLayout
+         *
          * @return PlayLayout Widget
          */
         public PlayLayout build() {

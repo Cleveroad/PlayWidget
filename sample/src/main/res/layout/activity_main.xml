@@ -8,7 +8,7 @@
 
     <com.cleveroad.play_widget.PlayLayout
         android:id="@+id/revealView"
-        android:layout_width="wrap_content"
+        android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         app:pw_image_src="@drawable/image"

@@ -1,35 +1,63 @@
 package com.cleveroad.sample;
 
 import android.Manifest;
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ValueAnimator;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.util.Log;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.cleveroad.play_widget.PlayLayout;
 import com.cleveroad.play_widget.VisualizerShadowChanger;
 
-public class MainActivity extends AppCompatActivity {
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
+public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPreparedListener,
+        MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener {
+
+    public static final String EXTRA_SELECT_TRACK = "EXTRA_SELECT_TRACK";
+    public static final String EXTRA_FILE_URIS = "EXTRA_FILE_URIS";
+    private static final long UPDATE_INTERVAL = 20;
     private static final int MY_PERMISSIONS_REQUEST_READ_AUDIO = 11;
 
     private PlayLayout mPlayLayout;
     private VisualizerShadowChanger mShadowChanger;
+    private MediaPlayer mediaPlayer;
+    private Timer timer;
+    private boolean preparing;
+    private int playingIndex = -1;
+    private boolean paused;
+    private final List<MusicItem> items = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar!=null) {
+            actionBar.hide();
+        }
         setContentView(R.layout.activity_main);
         mPlayLayout = (PlayLayout) findViewById(R.id.revealView);
         mPlayLayout.setOnButtonsClickListener(new PlayLayout.OnButtonsClickListenerAdapter() {
@@ -37,30 +65,58 @@ public class MainActivity extends AppCompatActivity {
             public void onPlayButtonClicked() {
                 playButtonClicked();
             }
-        });
-        mPlayLayout.setOnButtonsLongClickListener(new PlayLayout.OnButtonsLongClickListener() {
-            @Override
-            public void onShuffleLongClicked() {}
 
             @Override
-            public void onSkipPreviousLongClicked() {}
+            public void onSkipPreviousClicked() {
+                onPreviousClicked();
+                if (!mPlayLayout.isOpen()) {
+                    mPlayLayout.startRevealAnimation();
+                }
+            }
 
             @Override
-            public void onSkipNextLongClicked() {}
+            public void onSkipNextClicked() {
+                onNextClicked();
+                if (!mPlayLayout.isOpen()) {
+                    mPlayLayout.startRevealAnimation();
+                }
+            }
 
             @Override
-            public void onRepeatLongClicked() {}
+            public void onShuffleClicked() {
+                Toast.makeText(MainActivity.this, "Stub", Toast.LENGTH_SHORT).show();
+            }
 
             @Override
-            public void onPlayButtonLongClicked() {}
+            public void onRepeatClicked() {
+                Toast.makeText(MainActivity.this, "Stub", Toast.LENGTH_SHORT).show();
+            }
         });
         mPlayLayout.setOnProgressChangedListener(new PlayLayout.OnProgressChangedListener() {
             @Override
+            public void onPreSetProgress() {
+                stopTrackingPosition();
+            }
+
+            @Override
             public void onProgressChanged(float progress) {
                 Log.i("onProgressChanged", "Progress = " + progress);
+                mediaPlayer.seekTo((int) (mediaPlayer.getDuration() * progress));
+                startTrackingPosition();
             }
+
         });
 
+        mediaPlayer = new MediaPlayer();
+        mediaPlayer.setOnPreparedListener(this);
+        mediaPlayer.setOnCompletionListener(this);
+        mediaPlayer.setOnErrorListener(this);
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        mPlayLayout.fastOpen();
+        selectNewTrack(getIntent());
+    }
+
+    private void checkVisualiserPermissions() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.MODIFY_AUDIO_SETTINGS) == PackageManager.PERMISSION_GRANTED) {
             startVisualiser();
@@ -102,8 +158,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startVisualiser() {
-        mShadowChanger = VisualizerShadowChanger.newInstance(0);
-        mPlayLayout.setShadowProvider(mShadowChanger);
+        if (mShadowChanger == null) {
+            mShadowChanger = VisualizerShadowChanger.newInstance(mediaPlayer.getAudioSessionId());
+            mShadowChanger.setEnabledVisualization(true);
+            mPlayLayout.setShadowProvider(mShadowChanger);
+            Log.i("startVisualiser", "startVisualiser " + mediaPlayer.getAudioSessionId());
+        }
     }
 
     @Override
@@ -145,75 +205,185 @@ public class MainActivity extends AppCompatActivity {
         if (mShadowChanger != null) {
             mShadowChanger.release();
         }
+        stopTrackingPosition();
+        if (mediaPlayer.isPlaying()) {
+            mediaPlayer.stop();
+        }
+        mediaPlayer.reset();
+        mediaPlayer.release();
+        mediaPlayer = null;
         super.onDestroy();
     }
 
-    void playButtonClicked() {
+    private void selectNewTrack(Intent intent) {
+        if (preparing) {
+            return;
+        }
+        if (intent.hasExtra(EXTRA_FILE_URIS)) {
+            addNewTracks(intent);
+        }
+        MusicItem item = intent.getParcelableExtra(EXTRA_SELECT_TRACK);
+        if (item == null && playingIndex == -1 || playingIndex != -1 && items.get(playingIndex).equals(item)) {
+            if (mediaPlayer.isPlaying()) {
+                mPlayLayout.startDismissAnimation();
+            } else {
+                mPlayLayout.startRevealAnimation();
+            }
+            return;
+        }
+        playingIndex = items.indexOf(item);
+        startCurrentTrack();
+    }
+
+    private void setImageForItem() {
+        Glide.with(this)
+                .load(items.get(playingIndex).albumArtUri())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .centerCrop()
+                .error(R.drawable.white_centered_bordered_song_note_image)
+                .into(imageTarget);
+    }
+
+    private void startCurrentTrack() {
+        setImageForItem();
+        if (mediaPlayer.isPlaying() || paused) {
+            mediaPlayer.stop();
+            paused = false;
+        }
+        mediaPlayer.reset();
+        try {
+            mediaPlayer.setDataSource(this, items.get(playingIndex).fileUri());
+            mediaPlayer.prepareAsync();
+            preparing = true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void addNewTracks(Intent intent) {
+        MusicItem playingItem = null;
+        if (playingIndex != -1)
+            playingItem = items.get(playingIndex);
+        items.clear();
+        Parcelable[] items = intent.getParcelableArrayExtra(EXTRA_FILE_URIS);
+        for (Parcelable item : items) {
+            if (item instanceof MusicItem)
+                this.items.add((MusicItem) item);
+        }
+        if (playingItem == null) {
+            playingIndex = -1;
+        } else {
+            playingIndex = this.items.indexOf(playingItem);
+        }
+        if (playingIndex == -1 && mediaPlayer.isPlaying()) {
+            mediaPlayer.stop();
+            mediaPlayer.reset();
+        }
+    }
+
+    @Override
+    public void onPrepared(MediaPlayer mp) {
+        preparing = false;
+        mediaPlayer.start();
+        stopTrackingPosition();
+        startTrackingPosition();
+        checkVisualiserPermissions();
+    }
+
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+        if (playingIndex == -1) {
+//            audioWidget.controller().stop();
+            if (mPlayLayout != null) {
+                mPlayLayout.startDismissAnimation();
+            }
+            return;
+        }
+        playingIndex++;
+        if (playingIndex >= items.size()) {
+            playingIndex = 0;
+            if (items.size() == 0) {
+//                audioWidget.controller().stop();
+                return;
+            }
+        }
+        startCurrentTrack();
+    }
+
+    public void onNextClicked() {
+        if (items.size() == 0)
+            return;
+        playingIndex++;
+        if (playingIndex >= items.size()) {
+            playingIndex = 0;
+        }
+        startCurrentTrack();
+    }
+
+    public void onPreviousClicked() {
+        if (items.size() == 0)
+            return;
+        playingIndex--;
+        if (playingIndex < 0) {
+            playingIndex = items.size() - 1;
+        }
+        startCurrentTrack();
+    }
+
+    private void startTrackingPosition() {
+        timer = new Timer("MainActivity Timer");
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                MediaPlayer tempMediaPlayer = mediaPlayer;
+                if (tempMediaPlayer != null && tempMediaPlayer != null && tempMediaPlayer.isPlaying()) {
+
+                    mPlayLayout.setPostProgress((float) tempMediaPlayer.getCurrentPosition() / tempMediaPlayer.getDuration());
+                }
+
+            }
+        }, UPDATE_INTERVAL, UPDATE_INTERVAL);
+    }
+
+
+    private void stopTrackingPosition() {
+        if (timer == null)
+            return;
+        timer.cancel();
+        timer.purge();
+        timer = null;
+    }
+
+    private void playButtonClicked() {
         if (mPlayLayout == null) {
             return;
         }
-        Intent i = new Intent("com.android.music.musicservicecommand");
         if (mPlayLayout.isOpen()) {
-            AudioManager mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-            if (mAudioManager.isMusicActive()) {
-                i.putExtra("command", "pause");
-                sendBroadcast(i);
-            }
+            mediaPlayer.pause();
             mPlayLayout.startDismissAnimation();
         } else {
-
-            i.putExtra("command", "play");
-            sendBroadcast(i);
+            mediaPlayer.start();
             mPlayLayout.startRevealAnimation();
-            ValueAnimator valueAnimator = ValueAnimator.ofFloat(0.0f, 1.0f);
-            valueAnimator.setDuration(1200);
-            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    mPlayLayout.setProgress((Float) animation.getAnimatedValue());
-                }
-            });
-            valueAnimator.addListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
+        }
+    }
 
-//                    int[][] states = {
-//                            {android.R.attr.state_enabled},
-//                            {android.R.attr.state_pressed},
-//                    };
-//
-//                    int[] colors = {
-//                            Color.GREEN,
-//                            Color.RED,
-//                    };
-//
-//                    ColorStateList colorStateList = new ColorStateList(states, colors);
-//
-//                    mPlayLayout.setPlayButtonBackgroundTintList(colorStateList);
-//                    mPlayLayout.setBigDiffuserColor(Color.argb(100, 200, 150, 50));
-//                    mPlayLayout.setMediumDiffuserColor(Color.argb(100, 200, 150, 50));
-//
-//                    mPlayLayout.setButtonsSize(20);
-//                    mPlayLayout.setProgressLineStrokeWidth(30);
-//                    mPlayLayout.setProgressCompleteLineStrokeWidth(40);
-//                    mPlayLayout.setProgressBallRadius(30);
-//
-//                    mPlayLayout.setBigDiffuserShadowWidth(8);
-//                    mPlayLayout.setMediumDiffuserShadowWidth(8);
-//                    mPlayLayout.setSmallDiffuserShadowWidth(8);
-//
-//                    mPlayLayout.setProgressBallColor(Color.argb(100, 50, 150, 200));
-//                    mPlayLayout.setProgressCompleteColor(Color.argb(100, 50, 150, 200));
-//                    mPlayLayout.setProgressLineColor(Color.argb(100, 50, 150, 200));
-//
-//                    mPlayLayout.setDiffusersPadding(20);
-//                    mPlayLayout.setProgressLinePadding(20);
+    @Override
+    public boolean onError(MediaPlayer mp, int what, int extra) {
+        preparing = true;
+        return false;
+    }
 
-                    super.onAnimationEnd(animation);
-                }
-            });
-//            valueAnimator.start();
+    private SimpleTarget<GlideDrawable> imageTarget = new SimpleTarget<GlideDrawable>() {
+
+        @Override
+        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+            mPlayLayout.setImageDrawable(resource);
         }
 
-    }
+        @Override
+        public void onLoadFailed(Exception e, Drawable errorDrawable) {
+            super.onLoadFailed(e, errorDrawable);
+            mPlayLayout.setImageDrawable(errorDrawable);
+        }
+    };
 }

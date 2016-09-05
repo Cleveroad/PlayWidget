@@ -85,11 +85,12 @@ public class ProgressLineView extends ImageView {
         mProgressBallPaint.setAntiAlias(true);
         mProgressBallPaint.setStrokeWidth(1);
         setProgressBallColor(ContextCompat.getColor(getContext(), R.color.pw_progress_ball_color));
-
     }
 
     public void setProgress(float progress) {
-        this.mProgress = Math.min(1.0f, Math.max(0.0f, progress));
+        if (!mHandledTouch) {
+            this.mProgress = Math.min(1.0f, Math.max(0.0f, progress));
+        }
     }
 
     @Override
@@ -125,8 +126,20 @@ public class ProgressLineView extends ImageView {
             tanAngle += 360;
         }
 
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            if (mProgressChangedListener != null) {
+                mProgressChangedListener.onPreSetProgress();
+            }
+        }
+
         if (event.getAction() == MotionEvent.ACTION_UP) {
+            if (mHandledTouch) {
+                if (mProgressChangedListener != null) {
+                    mProgressChangedListener.onProgressChanged(mProgress);
+                }
+            }
             mHandledTouch = false;
+            return super.onTouchEvent(event);
         }
 
         if (!mHandledTouch && (tanAngle < BEGIN_PROGRESS_DEGREE || tanAngle > END_PROGRESS_DEGREE)) {
@@ -135,7 +148,7 @@ public class ProgressLineView extends ImageView {
 
         float radius = mProgressCurveRadius;
         if (mHandledTouch || (touchPointDistanceToCenter > radius - mAllowedTouchRadius && touchPointDistanceToCenter < radius + mAllowedTouchRadius)) {
-            mHandledTouch = true;
+
             double progressAngle = tanAngle - BEGIN_PROGRESS_DEGREE;
             if (tanAngle < BEGIN_PROGRESS_DEGREE) {
                 progressAngle = 0.0;
@@ -143,9 +156,7 @@ public class ProgressLineView extends ImageView {
                 progressAngle = END_PROGRESS_DEGREE - BEGIN_PROGRESS_DEGREE;
             }
             mProgress = (float) (progressAngle / (END_PROGRESS_DEGREE - BEGIN_PROGRESS_DEGREE));
-            if (mProgressChangedListener !=null) {
-                mProgressChangedListener.onProgressChanged(mProgress);
-            }
+            mHandledTouch = true;
             invalidate();
             return true;
         }
@@ -154,9 +165,11 @@ public class ProgressLineView extends ImageView {
 
     @Override
     protected void onDraw(Canvas canvas) {
+//        super.onDraw(canvas);
         float fullProgressDegree = (180.0f + ADDITIONAL_PROGRESS_DEGREE * 2) * mProgress;
-        canvas.drawArc(mRect, BEGIN_PROGRESS_DEGREE, fullProgressDegree, false, mProgressPaint);
-
+        if (fullProgressDegree>0.05f) {
+            canvas.drawArc(mRect, BEGIN_PROGRESS_DEGREE, fullProgressDegree, false, mProgressPaint);
+        }
         float ballPositionAngle = BEGIN_PROGRESS_DEGREE + fullProgressDegree;
         float progressBalX = mProgressCurveRadius + mProgressBallRadius + mPadding + (float) (mProgressCurveRadius * Math.cos(ballPositionAngle * Math.PI / 180.0f));
         float progressBalY = mProgressCurveRadius + mProgressBallRadius + mPadding + (float) (mProgressCurveRadius * Math.sin(ballPositionAngle * Math.PI / 180.0f));
@@ -169,9 +182,7 @@ public class ProgressLineView extends ImageView {
                 mProgressPointCenter.y + mProgressBallRadius
         );
         canvas.drawArc(mRect, ballPositionAngle, END_PROGRESS_DEGREE - ballPositionAngle, false, mLinePaint);
-
         canvas.drawCircle(mProgressPointCenter.x, mProgressPointCenter.y, mProgressBallRadius, mProgressBallPaint);
-        super.onDraw(canvas);
     }
 
 
@@ -257,6 +268,7 @@ public class ProgressLineView extends ImageView {
 
     /**
      * Set progressChangedListener
+     *
      * @param progressChangedListener PlayLayout.OnProgressChangedListener listener for the event;
      */
     public void setOnProgressChangedListener(PlayLayout.OnProgressChangedListener progressChangedListener) {

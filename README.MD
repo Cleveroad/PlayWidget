@@ -124,9 +124,12 @@ For providing progress changed listener use:
 ```JAVA
 void setOnProgressChangedListener(new OnProgressChangedListener() {
     @Override
+    void onPreSetProgress();
+    @Override
     public void onProgressChanged(float progress) {}
 });
 ```
+Method `onPreSetProgress` will be called when user touch progress line to start changing progress.
 For changing shadow params you can use method:
 ```JAVA
 void shadowChanged(

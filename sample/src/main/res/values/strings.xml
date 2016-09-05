@@ -2,6 +2,13 @@
     <string name="app_name">sample</string>
     <string name="title_permissions">Permissions</string>
     <string name="message_permissions"><![CDATA[To allow music widget view to process audio stream app needs an access to your <b>Microphone</b>.]]></string>
+    <string name="read_ext_permissions_message">To load list of music app needs access to your media files.</string>
     <string name="btn_next">Next</string>
     <string name="btn_cancel">Cancel</string>
+    <string name="btn_continue">Continue</string>
+    <string name="no_music_found">No music found</string>
+    <string name="album_cover">Album Cover</string>
+    <string name="toast_permissions_not_granted">Permissions not granted.</string>
+    <string name="permissions_title">Permissions</string>
+    <string name="search">Search</string>
 </resources>

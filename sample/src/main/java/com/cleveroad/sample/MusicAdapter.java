@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.Locale;
 
@@ -44,6 +45,7 @@ class MusicAdapter extends BaseRecyclerViewAdapter<MusicItem, MusicAdapter.Music
         Glide.with(getContext())
                 .load(item.albumArtUri())
                 .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .placeholder(R.drawable.ic_white_centered_bordered_song_note)
                 .error(R.drawable.ic_white_centered_bordered_song_note)
                 .into(holder.albumCover);

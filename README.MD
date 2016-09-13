@@ -179,7 +179,7 @@ For using **VisualizerShadowChanger** need to provide permissions:
 
 ## Support
 
-If you have any other questions regarding the use of this library, please contact us for support at info@cleveroad.com (email subject: "Android PlayAnimation widget. Support request.")
+If you have any other questions regarding the use of this library, please contact us for support at info@cleveroad.com (email subject: "Android PlayWidget widget. Support request.")
 
 
 ## License

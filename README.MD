@@ -6,7 +6,7 @@
 Are you creating a music app? Or maybe you want to add some creative detail to an existing one? Then you’ve come to the right place! Play Widget for Android created by Cleveroad can be easily integrated with your music app to spruce the user experience up. Break the monotony and make your music player unique!
 
 ![Demo image](/images/demo.gif)
-####Take a look at the animation on <strong><a target="_blank" href="https://www.youtube.com/watch?v=-8Yt8EZUdZE&index=5&list=PLi-FH7__aeiydOwY_1q5I8P2EUSseqUCj">Play Widget for Android on YouTube</a></strong> in HD quality.
+####Take a look at the animation on <strong><a target="_blank" href="https://youtu.be/-8Yt8EZUdZE?list=PLi-FH7__aeiydOwY_1q5I8P2EUSseqUCj">Play Widget for Android on YouTube</a></strong> in HD quality.
 
 New distinct things encourage users to launch your app again. Add the Play Widget component to your app and enjoy the benefits  — it’s easy as one-two-three.
 

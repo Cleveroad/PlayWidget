@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="pw_primary">#3F51B5</color>
+    <color name="pw_primary_dark">#303F9F</color>
+    <color name="pw_primary_light">#C5CAE9</color>
+    <color name="pw_accent">#FF5722</color>
+    <color name="pw_primary_text">#212121</color>
+    <color name="pw_secondary_text">#727272</color>
+    <color name="pw_icons">#FFFFFF</color>
+    <color name="pw_divider">#B6B6B6</color>
+
+    <color name="pw_bg_main">#FF444444</color>
+    <color name="pw_circle_color_strong">#FF5722</color>
+    <color name="pw_circle_color">#99FF5722</color>
+    <color name="pw_circle_color_translucent">#88FF5722</color>
+    <color name="pw_gray">#33000000</color>
+
+    <color name="pw_shadow_start_color">#4D000000</color>
+    <color name="pw_shadow_mid_color">#1D000000</color>
+    <color name="pw_shadow_end_color">#00000000</color>
+
+    <color name="pw_shadow_start_color_hard">#4F000000</color>
+    <color name="pw_shadow_mid_color_hard">#1F000000</color>
+    <color name="pw_shadow_end_color_hard">#00000000</color>
+
+    <color name="pw_big_diffuser_color">#99448888</color>
+    <color name="pw_medium_diffuser_color">#774488FF</color>
+    <color name="pw_fab_background_tint">#44FF88</color>
+
+    <color name="pw_progress_line_color">#99FF5722</color>
+    <color name="pw_progress_ball_color">#88FF5722</color>
+    <color name="pw_progress_complete_color">#99FFFFFF</color>
+
+    <color name="pw_bg_dark_gray_item_color_mask">#4d4d4d</color>
+    <color name="pw_bg_dark_gray_item_color">#595959</color>
+    <color name="pw_bg_light_gray_item_color">#bababa</color>
+
+</resources>

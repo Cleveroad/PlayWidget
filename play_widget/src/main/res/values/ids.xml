@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="pw_playButton" type="id"/>
+    <item name="pw_ivSkipPrevious" type="id"/>
+    <item name="pw_ivSkipNext" type="id"/>
+    <item name="pw_ivShuffle" type="id"/>
+    <item name="pw_ivRepeat" type="id"/>
+</resources>

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/pw_rlMainContainer"
+>
+
+    <RelativeLayout
+        android:id="@+id/pw_rlImagesContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:paddingBottom="@dimen/pw_default_fab_size"
+    >
+
+        <com.cleveroad.play_widget.internal.RoundRectImageView
+            android:id="@+id/pw_ivBackground"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="0dp"
+            android:minHeight="10dp"
+            android:minWidth="10dp"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/pw_image"
+        />
+
+        <com.cleveroad.play_widget.internal.DiffuserView
+            android:id="@+id/pw_ivBigDiffuser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"/>
+
+        <com.cleveroad.play_widget.internal.DiffuserView
+            android:id="@+id/pw_ivMediumDiffuser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"/>
+
+        <ImageView
+            android:id="@+id/pw_ivSmallDiffuser"
+            android:layout_width="@dimen/pw_small_diffuser_size"
+            android:layout_height="@dimen/pw_small_diffuser_size"
+            android:layout_centerInParent="true"/>
+
+        <com.cleveroad.play_widget.internal.ProgressLineView
+            android:id="@+id/pw_vProgressLine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_margin="0dp"
+            android:minHeight="56dp"
+            android:minWidth="56dp"/>
+
+    </RelativeLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@id/pw_playButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/pw_rlImagesContainer"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/pw_play_button_margin_bottom"
+        android:scaleType="center"
+        android:src="@drawable/pw_play"
+        app:backgroundTint="@color/pw_accent"
+        app:borderWidth="0dp"
+        app:elevation="@dimen/pw_small_fab_default_elevation"
+        app:fabSize="normal"
+        app:pressedTranslationZ="6dp"
+    />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/pw_playButton"
+        android:layout_alignTop="@+id/pw_playButton"
+        android:layout_toLeftOf="@+id/pw_playButton"
+        android:layout_toStartOf="@+id/pw_playButton"
+        android:gravity="center_vertical|end"
+        android:minWidth="@dimen/pw_image_item_double_size"
+        android:orientation="horizontal"
+    >
+
+        <ImageView
+            android:id="@id/pw_ivShuffle"
+            android:layout_width="@dimen/pw_image_item_size"
+            android:layout_height="@dimen/pw_image_item_size"
+            android:layout_marginEnd="@dimen/pw_image_item_margin"
+            android:layout_marginRight="@dimen/pw_image_item_margin"
+            android:background="@drawable/pw_bg_iv_black"
+            android:scaleType="centerInside"
+            android:src="@drawable/pw_ic_shuffle_black"
+        />
+
+        <ImageView
+            android:id="@id/pw_ivSkipPrevious"
+            android:layout_width="@dimen/pw_image_item_size"
+            android:layout_height="@dimen/pw_image_item_size"
+            android:layout_marginEnd="@dimen/pw_image_item_margin"
+            android:layout_marginRight="@dimen/pw_image_item_margin"
+            android:background="@drawable/pw_bg_iv_white"
+            android:scaleType="centerInside"
+            android:src="@drawable/pw_ic_skip_previous"
+        />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/pw_playButton"
+        android:layout_alignTop="@id/pw_playButton"
+        android:layout_toEndOf="@id/pw_playButton"
+        android:layout_toRightOf="@id/pw_playButton"
+        android:gravity="center_vertical"
+        android:minWidth="@dimen/pw_image_item_double_size"
+        android:orientation="horizontal"
+    >
+
+        <ImageView
+            android:id="@id/pw_ivSkipNext"
+            android:layout_width="@dimen/pw_image_item_size"
+            android:layout_height="@dimen/pw_image_item_size"
+            android:layout_marginLeft="@dimen/pw_image_item_margin"
+            android:layout_marginStart="@dimen/pw_image_item_margin"
+            android:background="@drawable/pw_bg_iv_white"
+            android:gravity="center"
+            android:scaleType="centerInside"
+            android:src="@drawable/pw_ic_skip_next"
+        />
+
+        <ImageView
+            android:id="@id/pw_ivRepeat"
+            android:layout_width="@dimen/pw_image_item_size"
+            android:layout_height="@dimen/pw_image_item_size"
+            android:layout_marginLeft="@dimen/pw_image_item_margin"
+            android:layout_marginStart="@dimen/pw_image_item_margin"
+            android:background="@drawable/pw_bg_iv_black"
+            android:gravity="center"
+            android:scaleType="centerInside"
+            android:src="@drawable/pw_ic_repeat_black"
+        />
+    </LinearLayout>
+
+
+</RelativeLayout>

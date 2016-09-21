@@ -19,7 +19,7 @@ New distinct things encourage users to launch your app again. Add the Play Widge
 To include this library to your project add dependency in **build.gradle** file:
 ```groovy
     dependencies {
-        compile 'com.cleveroad:audiovisualization:1.0.0'
+        compile 'com.cleveroad:play-widget:1.0.0'
     }
 ```
 

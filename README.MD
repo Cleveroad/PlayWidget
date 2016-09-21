@@ -16,6 +16,13 @@ New distinct things encourage users to launch your app again. Add the Play Widge
 
 
 ## Setup and usage
+To include this library to your project add dependency in **build.gradle** file:
+```groovy
+    dependencies {
+        compile 'com.cleveroad:play-widget:1.0.0'
+    }
+```
+
 Use the PlayLayout in layout file
 ```XML
 <com.cleveroad.play_widget.PlayLayout

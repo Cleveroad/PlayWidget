@@ -30,28 +30,28 @@ Use the PlayLayout in layout file
    android:layout_width="wrap_content"
    android:layout_height="wrap_content"
 
-   app:pa_progress_line_enabled="true"
-   app:pa_buttons_size="48dp"
-   app:pa_image_src="@drawable/pa_image"
+   app:pw_progress_line_enabled="true"
+   app:pw_buttons_size="48dp"
+   app:pw_image_src="@drawable/pa_image"
 
-   app:pa_progress_ball_color="#01999933"
-   app:pa_progress_complete_line_color="#77FFFFFF"
-   app:pa_progress_line_color="#34FF0000"
+   app:pw_progress_ball_color="#01999933"
+   app:pw_progress_complete_line_color="#77FFFFFF"
+   app:pw_progress_line_color="#34FF0000"
 
-   app:pa_progress_ball_radius="4dp"
-   app:pa_progress_complete_line_stroke_width="5dp"
-   app:pa_progress_line_stroke_width="3dp"
+   app:pw_progress_ball_radius="4dp"
+   app:pw_progress_complete_line_stroke_width="5dp"
+   app:pw_progress_line_stroke_width="3dp"
 
-   app:pa_progress_line_padding="10dp"
-   app:pa_diffusers_padding="15dp"
+   app:pw_progress_line_padding="10dp"
+   app:pw_diffusers_padding="15dp"
 
-   app:pa_big_diffuser_shadow_width="30dp"
-   app:pa_medium_diffuser_shadow_width="25dp"
-   app:pa_small_diffuser_shadow_width="20dp"
+   app:pw_big_diffuser_shadow_width="30dp"
+   app:pw_medium_diffuser_shadow_width="25dp"
+   app:pw_small_diffuser_shadow_width="20dp"
 
-   app:pa_big_diffuser_color="#009933"
-   app:pa_medium_diffuser_color="#003399"
-   app:pa_play_button_background_tint="#123456"
+   app:pw_big_diffuser_color="#009933"
+   app:pw_medium_diffuser_color="#003399"
+   app:pw_play_button_background_tint="#123456"
 />
 ```
 or programmatically

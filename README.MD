@@ -32,7 +32,7 @@ Use the PlayLayout in layout file
 
    app:pw_progress_line_enabled="true"
    app:pw_buttons_size="48dp"
-   app:pw_image_src="@drawable/pa_image"
+   app:pw_image_src="@drawable/pw_image"
 
    app:pw_progress_ball_color="#01999933"
    app:pw_progress_complete_line_color="#77FFFFFF"

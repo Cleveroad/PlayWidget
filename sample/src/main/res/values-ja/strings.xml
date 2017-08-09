@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">sample</string>
+    <string name="title_permissions">アクセス許可</string>
+    <string name="message_permissions"><![CDATA[ミュージックウィジェット ビューがオーディオストリームを処理するため、アプリは <b>マイク</b> へのアクセス許可が必要です。]]></string>
+    <string name="read_ext_permissions_message">ミュージックの一覧を読み込むため、アプリはメディアファイルへのアクセス許可が必要です。</string>
+    <string name="btn_next">次へ</string>
+    <string name="btn_cancel">キャンセル</string>
+    <string name="btn_continue">続行</string>
+    <string name="no_music_found">ミュージックが見つかりません</string>
+    <string name="album_cover">アルバム カバー</string>
+    <string name="toast_permissions_not_granted">アクセス許可が付与されていません。</string>
+    <string name="permissions_title">アクセス許可</string>
+    <string name="search">検索</string>
+</resources>
